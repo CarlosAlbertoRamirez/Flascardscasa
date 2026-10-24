@@ -1,0 +1,795 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Vocabulario — La Casa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* ── TOKENS — dark-neon YMF, single theme ── */
+:root{
+  --bg:#070019;--bg2:#0d0026;--bg3:#130030;--bg4:#1a003a;
+  --mag:#ff2bbf;--cyan:#37d7ff;--lime:#b6f542;--gold:#ffd166;
+  --purple:#a855f7;--coral:#ff6b6b;--mint:#34eca0;--sky:#60b4ff;
+  --orange:#ff8c42;--pink:#f472b6;
+  --text:#e8d9ff;--muted:#7a6090;--muted2:#3d2555;
+  --good:#34eca0;--bad:#ff6b6b;
+  --display:'Syne',sans-serif;--font:'DM Sans',sans-serif;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-bottom:60px;
+}
+
+/* ── STICKY HEADER ── */
+.site-header{
+  background:linear-gradient(160deg,#08001c 0%,#140030 100%);
+  border-bottom:1px solid rgba(255,43,191,.14);
+  padding:22px max(20px,env(safe-area-inset-left,0px)) 16px;
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
+}
+body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#08001c;z-index:61}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:.72rem;font-weight:900;color:var(--mag);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.h1{font-family:var(--display);font-size:1.7rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-.01em}
+.h1 em{font-style:normal;color:var(--accent,var(--cyan))}
+.header-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{font-family:var(--display);font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;border:1px solid;white-space:nowrap}
+.badge-level{background:rgba(182,245,66,.1);border-color:rgba(182,245,66,.3);color:var(--lime)}
+.badge-count{background:rgba(55,215,255,.08);border-color:rgba(55,215,255,.2);color:var(--cyan)}
+
+/* ── ROOM TABS ── */
+.tabs-strip{
+  background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.06);
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);z-index:50;
+  overflow-x:auto;
+}
+.tabs-strip::-webkit-scrollbar{display:none}
+.tabs-inner{display:flex;width:max-content;padding:0 max(16px,env(safe-area-inset-left,0px))}
+.room-tab{
+  font-family:var(--display);font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+  padding:13px 20px;border:0;background:transparent;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;white-space:nowrap;transition:.15s;position:relative;
+}
+.room-tab:hover{color:var(--text)}
+.room-tab.active{color:#fff;border-bottom-color:var(--room-color,var(--mag))}
+
+/* ── PAGE ── */
+.page{display:none;max-width:1100px;margin:0 auto;padding-top:32px}
+.page.active{display:block}
+
+/* ── SECTION TITLE ── */
+.room-title-row{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+.room-name{font-family:var(--display);font-size:2rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.room-name span{color:var(--room-color,var(--cyan))}
+.room-count{font-size:.75rem;color:var(--muted);font-weight:500}
+.room-desc{font-size:.82rem;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:540px}
+
+/* ── VIEW TOGGLE ── */
+.view-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.view-btns{display:flex;gap:5px}
+.vbtn{font-family:var(--display);font-size:.65rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;
+  padding:5px 13px;border-radius:8px;border:1px solid var(--muted2);background:transparent;
+  color:var(--muted);cursor:pointer;transition:.13s}
+.vbtn.active{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);color:#fff}
+
+/* ── FLASHCARD GRID ── */
+.fc-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.fc-wrap{perspective:900px;height:148px;cursor:pointer}
+.fc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;
+  transition:transform .42s cubic-bezier(.4,.2,.2,1)}
+.fc-wrap.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--bg3);border:1px solid rgba(255,255,255,.07);
+}
+.fc-face::after{content:'';position:absolute;inset:0;border-radius:12px;
+  background:radial-gradient(ellipse at 15% 15%,rgba(255,255,255,.03),transparent 60%);pointer-events:none}
+.fc-back-face{transform:rotateY(180deg);background:var(--bg4);border-color:rgba(255,255,255,.1)}
+.fc-word{font-family:var(--display);font-size:1.05rem;font-weight:900;color:#fff;flex:1;
+  display:flex;align-items:center;line-height:1.2;word-break:break-word}
+.fc-article{font-size:.72rem;color:var(--room-color,var(--cyan));font-weight:700;font-family:var(--display);
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.fc-cue{font-size:.6rem;color:var(--muted2);margin-top:auto;padding-top:6px;font-weight:600}
+.fc-back-es{font-family:var(--display);font-size:.9rem;font-weight:900;color:#fff;margin-bottom:4px}
+.fc-transl{font-size:.88rem;color:var(--room-color,var(--cyan));font-weight:700;margin-bottom:8px}
+.fc-example{font-size:.72rem;color:var(--muted);line-height:1.55;font-style:italic}
+.fc-example em{font-style:normal;color:var(--text);font-weight:600}
+
+/* ── LIST VIEW ── */
+.word-list{display:flex;flex-direction:column;gap:4px}
+.word-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-items:start;
+  background:var(--bg3);border:1px solid rgba(255,255,255,.05);border-radius:9px;
+  padding:10px 16px;transition:.12s;cursor:default
+}
+.word-row:hover{background:var(--bg4);border-color:rgba(255,255,255,.1)}
+.wr-es{font-family:var(--display);font-size:.9rem;font-weight:900;color:#fff}
+.wr-en{font-size:.82rem;color:var(--room-color,var(--cyan));font-weight:600;align-self:center}
+.wr-ex{grid-column:1/-1;font-size:.72rem;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.5}
+.wr-ex em{font-style:normal;color:var(--text);font-weight:600}
+
+/* ── DIVIDER ── */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--muted2),transparent);
+  margin:36px 0 32px;opacity:.5}
+
+/* ── EXERCISE SECTION ── */
+.ex-header{margin-bottom:20px}
+.ex-title{font-family:var(--display);font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:4px}
+.ex-subtitle{font-size:.78rem;color:var(--muted);font-weight:500}
+.ex-type-tabs{display:flex;gap:7px;margin-bottom:22px;flex-wrap:wrap}
+.extab{font-family:var(--display);font-size:.65rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;border:1px solid var(--muted2);background:transparent;
+  color:var(--muted);cursor:pointer;transition:.13s}
+.extab:hover{color:var(--text)}
+.extab.active{border-color:var(--room-color,var(--mag));color:var(--room-color,var(--mag));
+  background:rgba(255,255,255,.04)}
+.ex-panel{display:none}
+.ex-panel.active{display:block}
+
+/* ── MATCH ── */
+.match-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.match-col-head{font-family:var(--display);font-size:.6rem;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.match-chip{
+  background:var(--bg3);border:1px solid rgba(255,255,255,.08);border-radius:9px;
+  padding:9px 14px;margin-bottom:6px;font-size:.83rem;font-weight:600;cursor:pointer;
+  transition:.13s;user-select:none;line-height:1.3
+}
+.match-chip:hover:not(.correct):not(.locked){border-color:rgba(255,255,255,.2);background:var(--bg4)}
+.match-chip.selected{border-color:var(--room-color,var(--mag));background:rgba(255,43,191,.07);color:#fff}
+.match-chip.correct{border-color:var(--good);background:rgba(52,236,160,.08);color:var(--good);cursor:default}
+.match-chip.wrong{border-color:var(--bad);background:rgba(255,107,107,.07);animation:shake .28s}
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-5px)}70%{transform:translateX(5px)}}
+.match-score{font-family:var(--display);font-size:.82rem;font-weight:900;color:var(--good);
+  margin-top:4px;min-height:1.4em}
+
+/* ── FILL ── */
+.word-bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;
+  padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+.bank-label{font-family:var(--display);font-size:.58rem;font-weight:900;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);width:100%;margin-bottom:4px}
+.bank-chip{font-family:var(--display);font-size:.72rem;font-weight:900;letter-spacing:.03em;
+  padding:4px 11px;border-radius:20px;background:var(--bg4);border:1px solid rgba(255,255,255,.1);
+  color:var(--text);cursor:pointer;transition:.12s}
+.bank-chip:hover:not(.used){border-color:var(--room-color,var(--mag));color:var(--room-color,var(--mag))}
+.bank-chip.used{opacity:.28;pointer-events:none;text-decoration:line-through}
+
+.fill-list{display:flex;flex-direction:column;gap:14px}
+.fill-q{display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.fill-num{font-family:var(--display);font-size:.72rem;font-weight:900;color:var(--muted);
+  min-width:20px;padding-top:9px}
+.fill-sentence{font-size:.9rem;color:var(--text);line-height:1.9;flex:1;min-width:0}
+.fill-input{
+  background:var(--bg3);border:0;border-bottom:2px solid rgba(255,255,255,.18);
+  color:#fff;font-family:var(--display);font-size:.88rem;font-weight:900;
+  padding:2px 8px;width:130px;outline:none;transition:.15s;border-radius:0;
+  vertical-align:middle
+}
+.fill-input:focus{border-bottom-color:var(--room-color,var(--mag))}
+.fill-input.ok{border-bottom-color:var(--good);color:var(--good)}
+.fill-input.no{border-bottom-color:var(--bad)}
+.fill-fb{font-size:.72rem;margin-top:2px;padding-left:30px;font-weight:600;min-height:1.2em}
+.fill-fb.ok{color:var(--good)}
+.fill-fb.no{color:var(--bad)}
+
+/* ── MC ── */
+.mc-list{display:flex;flex-direction:column;gap:20px}
+.mc-q-text{font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:9px;line-height:1.55}
+.mc-q-text strong{color:var(--room-color,var(--cyan))}
+.mc-opts{display:flex;flex-direction:column;gap:4px}
+.mc-opt{
+  background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:9px;
+  padding:8px 14px;font-size:.83rem;font-weight:500;cursor:pointer;transition:.12s;
+  text-align:left;color:var(--text);display:flex;align-items:center;gap:10px
+}
+.mc-opt-letter{font-family:var(--display);font-size:.65rem;font-weight:900;width:18px;
+  flex-shrink:0;color:var(--muted)}
+.mc-opt:hover:not(:disabled){background:var(--bg4);border-color:rgba(255,255,255,.18)}
+.mc-opt.correct{border-color:var(--good);background:rgba(52,236,160,.09);color:var(--good)}
+.mc-opt.correct .mc-opt-letter{color:var(--good)}
+.mc-opt.wrong{border-color:var(--bad);background:rgba(255,107,107,.07);color:var(--bad)}
+.mc-opt.wrong .mc-opt-letter{color:var(--bad)}
+.mc-opt:disabled{cursor:default}
+.mc-score{font-family:var(--display);font-size:.82rem;font-weight:900;margin-top:16px;
+  color:var(--text);min-height:1.4em}
+.mc-score span{color:var(--room-color,var(--cyan))}
+
+/* ── ACTION BTNS ── */
+.action-row{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.btn-verify{font-family:var(--display);font-size:.7rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;
+  background:linear-gradient(135deg,var(--room-color,var(--mag)),var(--room-color2,#c020a0));
+  border:0;color:#fff;padding:9px 22px;border-radius:9px;cursor:pointer;transition:.13s}
+.btn-verify:hover{opacity:.85}
+.btn-reset{font-family:var(--display);font-size:.65rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--muted2);color:var(--muted);
+  padding:8px 16px;border-radius:9px;cursor:pointer;transition:.13s}
+.btn-reset:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:540px){
+  .fc-grid{grid-template-columns:repeat(2,1fr)}
+  .fc-wrap{height:136px}
+  .match-cols{grid-template-columns:1fr}
+  .word-row{grid-template-columns:1fr}
+  .wr-en{margin-top:1px}
+  .h1{font-size:1.35rem}
+}
+</style>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div class="header-inner">
+    <div>
+      <div class="brand">YMF · Vocabulario</div>
+      <div class="h1">La <em>Casa</em></div>
+    </div>
+    <div class="header-meta">
+      <span class="badge badge-level">A1 · Principiante</span>
+      <span class="badge badge-count" id="totalBadge">100 palabras</span>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM TABS -->
+<div class="tabs-strip">
+  <div class="tabs-inner" id="roomTabs"></div>
+</div>
+
+<!-- PAGES -->
+<div id="roomPages"></div>
+
+<script>
+const ROOMS = [
+  {
+    id:'sala',
+    name:'La sala',
+    color:'#37d7ff', color2:'#1a90c0',
+    desc:'El espacio principal de la casa donde la familia se reúne.',
+    words:[
+      {es:'el sofá',            en:'the sofa / couch',        ex:'El <em>sofá</em> es muy cómodo.'},
+      {es:'el sillón',          en:'the armchair',            ex:'Mi abuelo duerme en el <em>sillón</em>.'},
+      {es:'la mesa de centro',  en:'the coffee table',        ex:'Hay revistas en la <em>mesa de centro</em>.'},
+      {es:'el televisor',       en:'the television / TV',     ex:'El <em>televisor</em> está encendido.'},
+      {es:'el control remoto',  en:'the remote control',      ex:'¿Dónde está el <em>control remoto</em>?'},
+      {es:'la alfombra',        en:'the rug / carpet',        ex:'La <em>alfombra</em> es gris.'},
+      {es:'la lámpara',         en:'the lamp',                ex:'Enciende la <em>lámpara</em>, por favor.'},
+      {es:'la ventana',         en:'the window',              ex:'La <em>ventana</em> da al jardín.'},
+      {es:'la cortina',         en:'the curtain',             ex:'Las <em>cortinas</em> son azules.'},
+      {es:'el cuadro',          en:'the picture / painting',  ex:'Hay un <em>cuadro</em> bonito en la pared.'},
+      {es:'el estante',         en:'the shelf / bookcase',    ex:'Los libros están en el <em>estante</em>.'},
+      {es:'el cojín',           en:'the cushion / pillow',    ex:'El <em>cojín</em> es suave.'},
+      {es:'la pared',           en:'the wall',                ex:'La <em>pared</em> es blanca.'},
+      {es:'el piso',            en:'the floor',               ex:'El <em>piso</em> es de madera.'},
+      {es:'el techo',           en:'the ceiling',             ex:'El <em>techo</em> está muy alto.'},
+      {es:'la puerta',          en:'the door',                ex:'Cierra la <em>puerta</em>, hace frío.'},
+      {es:'el ventilador',      en:'the fan',                 ex:'El <em>ventilador</em> hace ruido.'},
+      {es:'el florero',         en:'the vase',                ex:'Hay flores en el <em>florero</em>.'},
+      {es:'la mesita',          en:'the small side table',    ex:'El teléfono está en la <em>mesita</em>.'},
+      {es:'el espejo',          en:'the mirror',              ex:'Me veo en el <em>espejo</em>.'},
+    ],
+    match:[
+      ['el sofá','the sofa'],['la alfombra','the rug'],['la cortina','the curtain'],
+      ['el cuadro','the painting'],['la lámpara','the lamp'],['el estante','the shelf'],
+      ['el cojín','the cushion'],['el espejo','the mirror'],
+    ],
+    fill:[
+      {s:'¿Dónde está el ____ remoto?',     a:'control',   h:'remote control — escribe: control'},
+      {s:'La ____ da al jardín.',            a:'ventana',   h:'window'},
+      {s:'El ____ es de madera.',            a:'piso',      h:'floor'},
+      {s:'Hay flores en el ____.',           a:'florero',   h:'vase'},
+      {s:'Las ____ son azules.',             a:'cortinas',  h:'curtains (plural)'},
+      {s:'Cierra la ____, hace frío.',       a:'puerta',    h:'door'},
+      {s:'Mi abuelo duerme en el ____.',     a:'sillón',    h:'armchair'},
+      {s:'El teléfono está en la ____.',     a:'mesita',    h:'small side table'},
+    ],
+    mc:[
+      {q:'What is "el cojín"?',   opts:['the blanket','the cushion','the pillow case','the rug'],  ok:1},
+      {q:'How do you say "the ceiling"?', opts:['el piso','la pared','el techo','la ventana'],     ok:2},
+      {q:'"El sillón" means…',    opts:['the sofa','the armchair','the rocking chair','the bench'],ok:1},
+      {q:'Which word means "the mirror"?', opts:['el cuadro','el florero','el estante','el espejo'],ok:3},
+      {q:'What is "la alfombra"?',opts:['the curtain','the wall','the rug','the shelf'],           ok:2},
+    ],
+  },
+  {
+    id:'cocina',
+    name:'La cocina',
+    color:'#ffd166', color2:'#c09000',
+    desc:'El espacio donde se prepara la comida. Vocabulario esencial para el día a día.',
+    words:[
+      {es:'la estufa',           en:'the stove',              ex:'La <em>estufa</em> tiene cuatro quemadores.'},
+      {es:'el horno',            en:'the oven',               ex:'El <em>horno</em> está caliente.'},
+      {es:'el microondas',       en:'the microwave',          ex:'Calienta la sopa en el <em>microondas</em>.'},
+      {es:'el refrigerador',     en:'the refrigerator / fridge', ex:'El <em>refrigerador</em> está lleno.'},
+      {es:'la licuadora',        en:'the blender',            ex:'La <em>licuadora</em> hace ruido.'},
+      {es:'el fregadero',        en:'the kitchen sink',       ex:'Lava los platos en el <em>fregadero</em>.'},
+      {es:'el cajón',            en:'the drawer',             ex:'Los cubiertos están en el <em>cajón</em>.'},
+      {es:'el armario',          en:'the cabinet / cupboard', ex:'Las tazas están en el <em>armario</em>.'},
+      {es:'la olla',             en:'the pot / saucepan',     ex:'La <em>olla</em> tiene arroz.'},
+      {es:'el sartén',           en:'the frying pan / skillet',ex:'El <em>sartén</em> está caliente.'},
+      {es:'el cuchillo',         en:'the knife',              ex:'El <em>cuchillo</em> está afilado.'},
+      {es:'el tenedor',          en:'the fork',               ex:'El <em>tenedor</em> está en la mesa.'},
+      {es:'la cuchara',          en:'the spoon',              ex:'Necesito una <em>cuchara</em> para la sopa.'},
+      {es:'el plato',            en:'the plate / dish',       ex:'El <em>plato</em> está limpio.'},
+      {es:'el vaso',             en:'the glass',              ex:'Dame un <em>vaso</em> de agua.'},
+      {es:'la taza',             en:'the cup / mug',          ex:'La <em>taza</em> de café está caliente.'},
+      {es:'la servilleta',       en:'the napkin',             ex:'Toma una <em>servilleta</em>.'},
+      {es:'el trapo',            en:'the dish cloth / rag',   ex:'Limpia con el <em>trapo</em>.'},
+      {es:'el delantal',         en:'the apron',              ex:'Mi mamá usa <em>delantal</em> para cocinar.'},
+      {es:'la tabla',            en:'the cutting board',      ex:'Corta las verduras en la <em>tabla</em>.'},
+    ],
+    match:[
+      ['la estufa','the stove'],['el horno','the oven'],['el fregadero','the sink'],
+      ['la olla','the pot'],['el cuchillo','the knife'],['la cuchara','the spoon'],
+      ['el vaso','the glass'],['el delantal','the apron'],
+    ],
+    fill:[
+      {s:'Calienta la sopa en el ____.',    a:'microondas', h:'microwave'},
+      {s:'Los cubiertos están en el ____.',  a:'cajón',      h:'drawer'},
+      {s:'El ____ tiene arroz.',             a:'olla',       h:'pot — ¡ojo! "la" olla pero escribe solo: olla'},
+      {s:'Dame un ____ de agua.',            a:'vaso',       h:'glass'},
+      {s:'Las tazas están en el ____.',      a:'armario',    h:'cabinet'},
+      {s:'Corta las verduras en la ____.',   a:'tabla',      h:'cutting board'},
+      {s:'El ____ está caliente.',           a:'sartén',     h:'frying pan'},
+      {s:'Toma una ____.',                   a:'servilleta', h:'napkin'},
+    ],
+    mc:[
+      {q:'What is "el fregadero"?',  opts:['the stove','the oven','the kitchen sink','the counter'],ok:2},
+      {q:'"La licuadora" means…',    opts:['the toaster','the blender','the mixer','the juicer'],   ok:1},
+      {q:'Which word means "the fork"?', opts:['el cuchillo','la cuchara','el tenedor','el plato'], ok:2},
+      {q:'What is "el trapo"?',      opts:['the apron','the napkin','the dish cloth','the towel'],   ok:2},
+      {q:'"El cajón" means…',        opts:['the drawer','the cabinet','the shelf','the box'],        ok:0},
+    ],
+  },
+  {
+    id:'habitacion',
+    name:'La habitación',
+    color:'#a855f7', color2:'#7020c0',
+    desc:'El cuarto donde se duerme y se descansa. También llamado "el cuarto" o "el dormitorio".',
+    words:[
+      {es:'la cama',             en:'the bed',                ex:'La <em>cama</em> está tendida.'},
+      {es:'la almohada',         en:'the pillow',             ex:'La <em>almohada</em> es suave.'},
+      {es:'la cobija',           en:'the blanket',            ex:'Necesito otra <em>cobija</em>, hace frío.'},
+      {es:'las sábanas',         en:'the bed sheets',         ex:'Las <em>sábanas</em> están limpias.'},
+      {es:'el colchón',          en:'the mattress',           ex:'El <em>colchón</em> es nuevo.'},
+      {es:'el buró',             en:'the nightstand',         ex:'El celular está en el <em>buró</em>.'},
+      {es:'el armario / el clóset', en:'the wardrobe / closet',ex:'Mi ropa está en el <em>clóset</em>.'},
+      {es:'el cajón',            en:'the drawer',             ex:'Los calcetines están en el <em>cajón</em>.'},
+      {es:'el espejo',           en:'the mirror',             ex:'Me arreglo frente al <em>espejo</em>.'},
+      {es:'la lámpara de buró',  en:'the bedside lamp',       ex:'Apaga la <em>lámpara de buró</em>.'},
+      {es:'la ventana',          en:'the window',             ex:'La <em>ventana</em> está abierta.'},
+      {es:'la cortina',          en:'the curtain',            ex:'Cierra las <em>cortinas</em>, hay mucha luz.'},
+      {es:'el escritorio',       en:'the desk',               ex:'Hago mi tarea en el <em>escritorio</em>.'},
+      {es:'la silla',            en:'the chair',              ex:'La <em>silla</em> está frente al escritorio.'},
+      {es:'la alfombra',         en:'the rug',                ex:'La <em>alfombra</em> es suave.'},
+      {es:'el cuadro',           en:'the picture / painting', ex:'Hay un <em>cuadro</em> de mi familia.'},
+      {es:'el despertador',      en:'the alarm clock',        ex:'El <em>despertador</em> suena a las seis.'},
+      {es:'el cargador',         en:'the charger',            ex:'¿Dónde está el <em>cargador</em>?'},
+      {es:'la percha',           en:'the clothes hanger',     ex:'Cuelga la ropa en la <em>percha</em>.'},
+      {es:'el piso',             en:'the floor',              ex:'El <em>piso</em> está frío.'},
+    ],
+    match:[
+      ['la cama','the bed'],['la almohada','the pillow'],['las sábanas','the bed sheets'],
+      ['el buró','the nightstand'],['el escritorio','the desk'],['el despertador','the alarm clock'],
+      ['la cobija','the blanket'],['el cargador','the charger'],
+    ],
+    fill:[
+      {s:'El celular está en el ____.',      a:'buró',       h:'nightstand'},
+      {s:'El ____ suena a las seis.',         a:'despertador',h:'alarm clock'},
+      {s:'Hago mi tarea en el ____.',         a:'escritorio', h:'desk'},
+      {s:'Necesito otra ____, hace frío.',    a:'cobija',     h:'blanket'},
+      {s:'Cierra las ____, hay mucha luz.',   a:'cortinas',   h:'curtains (plural)'},
+      {s:'Cuelga la ropa en la ____.',        a:'percha',     h:'clothes hanger'},
+      {s:'El ____ es nuevo.',                 a:'colchón',    h:'mattress'},
+      {s:'¿Dónde está el ____?',              a:'cargador',   h:'charger'},
+    ],
+    mc:[
+      {q:'What is "el buró"?',       opts:['the dresser','the nightstand','the wardrobe','the desk'],ok:1},
+      {q:'"El colchón" means…',      opts:['the pillow','the blanket','the mattress','the sheet'],   ok:2},
+      {q:'Which word means "the charger"?', opts:['el enchufe','el cable','el cargador','el botón'], ok:2},
+      {q:'What is "las sábanas"?',   opts:['the pillowcases','the blankets','the bed sheets','the curtains'],ok:2},
+      {q:'"La percha" means…',       opts:['the shelf','the hook','the clothes hanger','the rack'],  ok:2},
+    ],
+  },
+  {
+    id:'bano',
+    name:'El baño',
+    color:'#34eca0', color2:'#1aaa70',
+    desc:'El espacio para la higiene personal. Vocabulario muy útil para el día a día.',
+    words:[
+      {es:'el lavabo',           en:'the sink / washbasin',   ex:'Me lavo las manos en el <em>lavabo</em>.'},
+      {es:'el excusado / el inodoro', en:'the toilet',       ex:'El <em>excusado</em> está al fondo.'},
+      {es:'la regadera',         en:'the shower',             ex:'Me baño en la <em>regadera</em>.'},
+      {es:'la bañera',           en:'the bathtub',            ex:'La <em>bañera</em> está llena de agua.'},
+      {es:'el espejo',           en:'the mirror',             ex:'Me veo en el <em>espejo</em> del baño.'},
+      {es:'la toalla',           en:'the towel',              ex:'La <em>toalla</em> está mojada.'},
+      {es:'el jabón',            en:'the soap',               ex:'Usa el <em>jabón</em> para lavarte las manos.'},
+      {es:'el shampoo',          en:'the shampoo',            ex:'El <em>shampoo</em> huele rico.'},
+      {es:'el acondicionador',   en:'the conditioner',        ex:'El <em>acondicionador</em> suaviza el cabello.'},
+      {es:'la pasta de dientes', en:'the toothpaste',         ex:'Necesito <em>pasta de dientes</em>.'},
+      {es:'el cepillo de dientes',en:'the toothbrush',        ex:'Mi <em>cepillo de dientes</em> es azul.'},
+      {es:'el desodorante',      en:'the deodorant',          ex:'El <em>desodorante</em> está en el cajón.'},
+      {es:'el peine',            en:'the comb',               ex:'¿Dónde está mi <em>peine</em>?'},
+      {es:'el cepillo del pelo', en:'the hairbrush',          ex:'El <em>cepillo del pelo</em> está en el baño.'},
+      {es:'el papel higiénico',  en:'the toilet paper',       ex:'No hay <em>papel higiénico</em>.'},
+      {es:'la regla del agua',   en:'the faucet / tap',       ex:'Abre la <em>llave</em> del agua.'},
+      {es:'la llave',            en:'the faucet / tap',       ex:'La <em>llave</em> gotea.'},
+      {es:'la cortina de baño',  en:'the shower curtain',     ex:'La <em>cortina de baño</em> es blanca.'},
+      {es:'el tapete',           en:'the bath mat',           ex:'El <em>tapete</em> está mojado.'},
+      {es:'el botiquín',         en:'the medicine cabinet',   ex:'Las medicinas están en el <em>botiquín</em>.'},
+    ],
+    match:[
+      ['el lavabo','the sink'],['la regadera','the shower'],['la toalla','the towel'],
+      ['el jabón','the soap'],['el peine','the comb'],['el tapete','the bath mat'],
+      ['el botiquín','the medicine cabinet'],['la bañera','the bathtub'],
+    ],
+    fill:[
+      {s:'Me lavo las manos en el ____.',    a:'lavabo',        h:'sink'},
+      {s:'La ____ está mojada.',             a:'toalla',        h:'towel'},
+      {s:'El ____ huele rico.',              a:'shampoo',       h:'shampoo'},
+      {s:'No hay ____ higiénico.',           a:'papel',         h:'toilet paper — escribe: papel'},
+      {s:'Mi ____ de dientes es azul.',      a:'cepillo',       h:'toothbrush — escribe: cepillo'},
+      {s:'La ____ de baño es blanca.',       a:'cortina',       h:'shower curtain — escribe: cortina'},
+      {s:'El ____ suaviza el cabello.',      a:'acondicionador',h:'conditioner'},
+      {s:'Las medicinas están en el ____.',  a:'botiquín',      h:'medicine cabinet'},
+    ],
+    mc:[
+      {q:'What is "el excusado"?',  opts:['the sink','the shower','the toilet','the bathtub'],       ok:2},
+      {q:'"El tapete" in the bathroom means…', opts:['the towel','the bath mat','the rug','the curtain'],ok:1},
+      {q:'Which word means "the toothpaste"?', opts:['el jabón','el shampoo','la pasta de dientes','el desodorante'],ok:2},
+      {q:'What is "el botiquín"?',  opts:['the first aid kit','the medicine cabinet','the toilet bag','the cabinet'],ok:1},
+      {q:'"La llave" in the bathroom means…', opts:['the key','the faucet/tap','the lock','the handle'],ok:1},
+    ],
+  },
+  {
+    id:'comedor',
+    name:'El comedor',
+    color:'#ff8c42', color2:'#c05010',
+    desc:'El espacio donde la familia come. En México muchas veces está unido a la cocina.',
+    words:[
+      {es:'la mesa',             en:'the table',              ex:'La <em>mesa</em> está puesta.'},
+      {es:'la silla',            en:'the chair',              ex:'Hay seis <em>sillas</em> en el comedor.'},
+      {es:'el mantel',           en:'the tablecloth',         ex:'El <em>mantel</em> es de flores.'},
+      {es:'el plato',            en:'the plate',              ex:'El <em>plato</em> está limpio.'},
+      {es:'el vaso',             en:'the glass',              ex:'El <em>vaso</em> está lleno.'},
+      {es:'la copa',             en:'the wine glass / goblet',ex:'La <em>copa</em> es de cristal.'},
+      {es:'el tenedor',          en:'the fork',               ex:'El <em>tenedor</em> va a la izquierda.'},
+      {es:'el cuchillo',         en:'the knife',              ex:'El <em>cuchillo</em> va a la derecha.'},
+      {es:'la cuchara',          en:'the spoon',              ex:'La <em>cuchara</em> es para la sopa.'},
+      {es:'la cucharita',        en:'the teaspoon',           ex:'La <em>cucharita</em> es para el café.'},
+      {es:'la servilleta',       en:'the napkin',             ex:'Hay una <em>servilleta</em> en cada plato.'},
+      {es:'la jarra',            en:'the pitcher / jug',      ex:'La <em>jarra</em> tiene agua.'},
+      {es:'el salero',           en:'the salt shaker',        ex:'Pásame el <em>salero</em>, por favor.'},
+      {es:'el azucarero',        en:'the sugar bowl',         ex:'El <em>azucarero</em> está vacío.'},
+      {es:'la salsera',          en:'the sauce / salsa bowl', ex:'Hay salsa en la <em>salsera</em>.'},
+      {es:'la canasta del pan',  en:'the bread basket',       ex:'La <em>canasta del pan</em> está en el centro.'},
+      {es:'el centro de mesa',   en:'the centerpiece',        ex:'Hay flores en el <em>centro de mesa</em>.'},
+      {es:'la vitrina',          en:'the display cabinet',    ex:'Los platos finos están en la <em>vitrina</em>.'},
+      {es:'el trinchador',       en:'the sideboard / buffet table', ex:'El <em>trinchador</em> tiene botellas.'},
+      {es:'la silla alta',       en:'the high chair (for babies)', ex:'El bebé come en la <em>silla alta</em>.'},
+    ],
+    match:[
+      ['la mesa','the table'],['el mantel','the tablecloth'],['la jarra','the pitcher'],
+      ['el salero','the salt shaker'],['la copa','the wine glass'],['la vitrina','the display cabinet'],
+      ['la cucharita','the teaspoon'],['la salsera','the salsa bowl'],
+    ],
+    fill:[
+      {s:'La ____ tiene agua.',              a:'jarra',      h:'pitcher'},
+      {s:'Pásame el ____, por favor.',        a:'salero',     h:'salt shaker'},
+      {s:'La ____ es para la sopa.',          a:'cuchara',    h:'spoon'},
+      {s:'El ____ está vacío.',               a:'azucarero',  h:'sugar bowl'},
+      {s:'Hay flores en el ____ de mesa.',    a:'centro',     h:'centerpiece — escribe: centro'},
+      {s:'El bebé come en la ____ alta.',     a:'silla',      h:'high chair — escribe: silla'},
+      {s:'El ____ tiene botellas.',           a:'trinchador', h:'sideboard'},
+      {s:'El <em>cuchillo</em> va a la ____.',a:'derecha',    h:'right (direction)'},
+    ],
+    mc:[
+      {q:'What is "el mantel"?',   opts:['the napkin','the tablecloth','the placemat','the curtain'],ok:1},
+      {q:'"La vitrina" in the dining room is…', opts:['the window','the mirror','the display cabinet','the sideboard'],ok:2},
+      {q:'Which word means "the teaspoon"?', opts:['la cuchara','la cucharita','el tenedor','el cubierto'],ok:1},
+      {q:'What is "el azucarero"?', opts:['the salt shaker','the pepper pot','the sugar bowl','the creamer'],ok:2},
+      {q:'"La salsera" means…',    opts:['the gravy boat','the salsa bowl','the butter dish','the sauce pan'],ok:1},
+    ],
+  },
+];
+
+// ── RENDER ──────────────────────────────────────────────────────
+function buildAll(){
+  const tabsEl = document.getElementById('roomTabs');
+  const pagesEl = document.getElementById('roomPages');
+  document.getElementById('totalBadge').textContent =
+    ROOMS.reduce((s,r)=>s+r.words.length,0)+' palabras';
+
+  tabsEl.innerHTML = ROOMS.map((r,i)=>`
+    <button class="room-tab${i===0?' active':''}" id="rtab_${r.id}"
+      style="--room-color:${r.color}" onclick="switchRoom('${r.id}')">
+      ${r.name}
+    </button>`).join('');
+
+  pagesEl.innerHTML = ROOMS.map((r,i)=>`
+    <div class="page${i===0?' active':''}" id="rpage_${r.id}"
+      style="--room-color:${r.color};--room-color2:${r.color2}">
+      <div class="room-title-row">
+        <div class="room-name"><span>${r.name}</span></div>
+        <div class="room-count">${r.words.length} palabras</div>
+      </div>
+      <div class="room-desc">${r.desc}</div>
+
+      <div class="view-row">
+        <div class="view-btns">
+          <button class="vbtn active" id="vb_cards_${r.id}" onclick="setView('${r.id}','cards')">Tarjetas</button>
+          <button class="vbtn" id="vb_list_${r.id}" onclick="setView('${r.id}','list')">Lista</button>
+        </div>
+      </div>
+      <div id="vwrap_${r.id}">${buildCards(r)}</div>
+
+      <div class="section-divider"></div>
+
+      <div class="ex-header">
+        <div class="ex-title">Ejercicios — ${r.name}</div>
+        <div class="ex-subtitle">Practica el vocabulario de ${r.name.toLowerCase()}.</div>
+      </div>
+      <div class="ex-type-tabs">
+        <button class="extab active" id="et_match_${r.id}" onclick="setExType('${r.id}','match')">Relaciona</button>
+        <button class="extab" id="et_fill_${r.id}" onclick="setExType('${r.id}','fill')">Completa</button>
+        <button class="extab" id="et_mc_${r.id}" onclick="setExType('${r.id}','mc')">Selección múltiple</button>
+      </div>
+      <div id="ep_match_${r.id}" class="ex-panel active">${buildMatch(r)}</div>
+      <div id="ep_fill_${r.id}" class="ex-panel">${buildFill(r)}</div>
+      <div id="ep_mc_${r.id}" class="ex-panel">${buildMC(r)}</div>
+    </div>`).join('');
+}
+
+// Cards
+function buildCards(r){
+  return `<div class="fc-grid">${r.words.map((w,i)=>`
+    <div class="fc-wrap" id="fc_${r.id}_${i}" onclick="flip('${r.id}',${i})">
+      <div class="fc-inner">
+        <div class="fc-face">
+          <div class="fc-article" style="color:${r.color}">${getArticle(w.es)}</div>
+          <div class="fc-word">${stripArticle(w.es)}</div>
+          <div class="fc-cue">tap to flip →</div>
+        </div>
+        <div class="fc-face fc-back-face">
+          <div class="fc-back-es">${w.es}</div>
+          <div class="fc-transl" style="color:${r.color}">${w.en}</div>
+          <div class="fc-example">${w.ex}</div>
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function getArticle(word){
+  const m = word.match(/^(el|la|los|las|un|una)\s/);
+  return m ? m[1].toUpperCase() : '';
+}
+function stripArticle(word){
+  return word.replace(/^(el|la|los|las|un|una)\s/,'');
+}
+function flip(rid,i){ document.getElementById('fc_'+rid+'_'+i)?.classList.toggle('flipped'); }
+
+// List
+function buildList(r){
+  return `<div class="word-list">${r.words.map(w=>`
+    <div class="word-row">
+      <div class="wr-es">${w.es}</div>
+      <div class="wr-en">${w.en}</div>
+      <div class="wr-ex">${w.ex}</div>
+    </div>`).join('')}</div>`;
+}
+
+function setView(rid, mode){
+  const room = ROOMS.find(r=>r.id===rid);
+  document.getElementById('vwrap_'+rid).innerHTML =
+    mode==='cards' ? buildCards(room) : buildList(room);
+  ['cards','list'].forEach(m=>{
+    document.getElementById('vb_'+m+'_'+rid)?.classList.toggle('active',m===mode);
+  });
+}
+
+// Match
+function buildMatch(r){
+  const items = r.match;
+  const esS = [...items].sort(()=>Math.random()-.5);
+  const enS = [...items].sort(()=>Math.random()-.5);
+  return `<div class="match-cols" id="mcols_${r.id}">
+    <div>
+      <div class="match-col-head">Español</div>
+      ${esS.map((p,i)=>`<div class="match-chip" id="mes_${r.id}_${i}"
+        onclick="pickMatch('${r.id}','es',${i},'${esc(p[0])}','${esc(p[1])}')">
+        ${p[0]}</div>`).join('')}
+    </div>
+    <div>
+      <div class="match-col-head">English</div>
+      ${enS.map((p,i)=>`<div class="match-chip" id="men_${r.id}_${i}"
+        onclick="pickMatch('${r.id}','en',${i},'${esc(p[0])}','${esc(p[1])}')">
+        ${p[1]}</div>`).join('')}
+    </div>
+  </div>
+  <div class="match-score" id="msc_${r.id}"></div>`;
+}
+
+const MS={};
+function pickMatch(rid,side,idx,es,en){
+  if(!MS[rid])MS[rid]={sel:null,ok:0,tot:ROOMS.find(r=>r.id===rid).match.length};
+  const st=MS[rid];
+  const elId=(side==='es'?'mes_':'men_')+rid+'_'+idx;
+  const el=document.getElementById(elId);
+  if(!el||el.classList.contains('correct'))return;
+  if(!st.sel){
+    document.querySelectorAll('[id^="mes_'+rid+'_"],[id^="men_'+rid+'_"]').forEach(e=>e.classList.remove('selected'));
+    el.classList.add('selected');
+    st.sel={side,idx,es,en,elId};
+  } else {
+    if(st.sel.elId===elId){el.classList.remove('selected');st.sel=null;return;}
+    const match=st.sel.es===es&&st.sel.en===en;
+    if(match){
+      [elId,st.sel.elId].forEach(id=>{
+        const e=document.getElementById(id);
+        if(e){e.classList.remove('selected');e.classList.add('correct');}
+      });
+      st.ok++;
+      if(st.ok>=st.tot){
+        const sc=document.getElementById('msc_'+rid);
+        if(sc)sc.textContent='¡Perfecto! '+st.tot+'/'+st.tot+' correctas.';
+      }
+    } else {
+      [elId,st.sel.elId].forEach(id=>{
+        const e=document.getElementById(id);
+        if(e){e.classList.add('wrong');setTimeout(()=>e.classList.remove('wrong','selected'),500);}
+      });
+    }
+    st.sel=null;
+  }
+}
+
+// Fill
+function buildFill(r){
+  const bank=[...r.fill].sort(()=>Math.random()-.5);
+  return `<div class="word-bank">
+    <div class="bank-label">Banco de palabras</div>
+    ${r.fill.map(f=>`<span class="bank-chip" id="bc_${r.id}_${f.a}"
+      onclick="useBank('${r.id}','${f.a}')">${f.a}</span>`).join('')}
+  </div>
+  <div class="fill-list">${r.fill.map((f,i)=>`
+    <div>
+      <div class="fill-q">
+        <span class="fill-num">${i+1}.</span>
+        <div class="fill-sentence">${f.s.replace('____',
+          `<input class="fill-input" id="fi_${r.id}_${i}"
+            data-ans="${f.a}" placeholder="…" autocomplete="off"
+            oninput="onFillInput('${r.id}',${i})" />`)}</div>
+      </div>
+      <div class="fill-fb" id="ff_${r.id}_${i}"></div>
+    </div>`).join('')}
+  </div>
+  <div class="action-row">
+    <button class="btn-verify" onclick="verifyFill('${r.id}')">Verificar</button>
+    <button class="btn-reset" onclick="resetFill('${r.id}')">Reiniciar</button>
+  </div>
+  <div class="mc-score" id="fsc_${r.id}" style="margin-top:12px"></div>`;
+}
+
+function useBank(rid,word){
+  const r=ROOMS.find(x=>x.id===rid);
+  for(let i=0;i<r.fill.length;i++){
+    const inp=document.getElementById('fi_'+rid+'_'+i);
+    if(inp&&!inp.value){inp.value=word;break;}
+  }
+}
+function onFillInput(){}
+function verifyFill(rid){
+  const r=ROOMS.find(x=>x.id===rid);
+  let ok=0;
+  r.fill.forEach((f,i)=>{
+    const inp=document.getElementById('fi_'+rid+'_'+i);
+    const fb=document.getElementById('ff_'+rid+'_'+i);
+    if(!inp||!fb)return;
+    const correct=inp.value.trim().toLowerCase()===f.a.toLowerCase();
+    inp.classList.toggle('ok',correct);
+    inp.classList.toggle('no',!correct);
+    if(correct){fb.textContent='✓ Correcto';fb.className='fill-fb ok';ok++;
+      const bc=document.getElementById('bc_'+rid+'_'+f.a);
+      if(bc)bc.classList.add('used');
+    } else {
+      fb.innerHTML=`✗ Era: <strong>${f.a}</strong> — ${f.h}`;
+      fb.className='fill-fb no';
+    }
+  });
+  const sc=document.getElementById('fsc_'+rid);
+  if(sc){sc.innerHTML=`Resultado: <span>${ok}/${r.fill.length}</span>`;}
+}
+function resetFill(rid){
+  const r=ROOMS.find(x=>x.id===rid);
+  r.fill.forEach((f,i)=>{
+    const inp=document.getElementById('fi_'+rid+'_'+i);
+    const fb=document.getElementById('ff_'+rid+'_'+i);
+    if(inp){inp.value='';inp.className='fill-input';}
+    if(fb){fb.textContent='';fb.className='fill-fb';}
+    const bc=document.getElementById('bc_'+rid+'_'+f.a);
+    if(bc)bc.classList.remove('used');
+  });
+  const sc=document.getElementById('fsc_'+rid);
+  if(sc)sc.innerHTML='';
+}
+
+// MC
+function buildMC(r){
+  const shuffled=r.mc.map(q=>({...q,opts:q.opts.map((o,i)=>({o,i})).sort(()=>Math.random()-.5)}));
+  return `<div class="mc-list">${shuffled.map((q,qi)=>`
+    <div>
+      <div class="mc-q-text">${qi+1}. ${q.q}</div>
+      <div class="mc-opts">${q.opts.map((op,pos)=>`
+        <button class="mc-opt" id="mo_${r.id}_${qi}_${pos}"
+          onclick="pickMC('${r.id}',${qi},${pos},${op.i},${q.ok})">
+          <span class="mc-opt-letter">${String.fromCharCode(65+pos)}</span>${op.o}
+        </button>`).join('')}
+      </div>
+    </div>`).join('')}
+  </div>
+  <div class="mc-score" id="mcsc_${r.id}"></div>`;
+}
+
+const MCS={};
+function pickMC(rid,qi,pos,origIdx,correctOrigIdx){
+  if(!MCS[rid])MCS[rid]={done:new Set(),ok:0,tot:ROOMS.find(r=>r.id===rid).mc.length};
+  const st=MCS[rid];
+  if(st.done.has(qi))return;
+  st.done.add(qi);
+  const correct=origIdx===correctOrigIdx;
+  if(correct)st.ok++;
+  const r=ROOMS.find(x=>x.id===rid);
+  // find correct button in this question
+  for(let p=0;p<r.mc[0].opts.length;p++){
+    const btn=document.getElementById('mo_'+rid+'_'+qi+'_'+p);
+    if(!btn)continue;
+    btn.disabled=true;
+  }
+  // we need to know which pos has the correct original index — stored as data
+  // simpler: just style by what was clicked vs what is correct
+  // Re-approach: style current btn, find correct
+  const clicked=document.getElementById('mo_'+rid+'_'+qi+'_'+pos);
+  if(clicked) clicked.classList.add(correct?'correct':'wrong');
+  if(!correct){
+    // show correct answer — iterate to find
+    for(let p=0;p<5;p++){
+      const btn=document.getElementById('mo_'+rid+'_'+qi+'_'+p);
+      if(!btn)break;
+      // get original index from onclick attr
+      const oc=btn.getAttribute('onclick')||'';
+      const m=oc.match(/,(\d+),\d+\)$/);
+      if(m&&parseInt(m[1])===correctOrigIdx){btn.classList.add('correct');break;}
+    }
+  }
+  if(st.done.size>=st.tot){
+    const sc=document.getElementById('mcsc_'+rid);
+    if(sc)sc.innerHTML=`Resultado: <span>${st.ok}/${st.tot}</span>`;
+  }
+}
+
+// Navigation
+function switchRoom(id){
+  ROOMS.forEach(r=>{
+    document.getElementById('rtab_'+r.id)?.classList.toggle('active',r.id===id);
+    document.getElementById('rpage_'+r.id)?.classList.toggle('active',r.id===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setExType(rid,type){
+  ['match','fill','mc'].forEach(t=>{
+    document.getElementById('et_'+t+'_'+rid)?.classList.toggle('active',t===type);
+    document.getElementById('ep_'+t+'_'+rid)?.classList.toggle('active',t===type);
+  });
+}
+
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+
+buildAll();
+</script>
+
+</body></html>
